@@ -14,6 +14,8 @@ function App() {
   const location = useLocation()
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
   const [openSection, setOpenSection] = useState(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [drawerSection, setDrawerSection] = useState(null)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -22,7 +24,15 @@ function App() {
 
   useEffect(() => {
     setOpenSection(null)
+    setDrawerOpen(false)
+    setDrawerSection(null)
   }, [location.pathname])
+
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [drawerOpen])
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light')
@@ -73,6 +83,10 @@ function App() {
     return section.items.some(item => location.pathname === item.path)
   }
 
+  const toggleDrawerSection = (label) => {
+    setDrawerSection(prev => prev === label ? null : label)
+  }
+
   return (
     <div className="app-layout">
       <header className="topbar">
@@ -84,6 +98,7 @@ function App() {
           </div>
         </NavLink>
 
+        {/* Desktop nav — hidden on mobile via CSS */}
         <nav className="topbar-nav">
           {navSections.map(section => (
             <div
@@ -119,13 +134,77 @@ function App() {
 
         <div className="topbar-right">
           <div className="topbar-privacy">
-            🔒 Private & Secure
+            🔒 Private &amp; Secure
           </div>
           <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
+          {/* Hamburger — mobile only */}
+          <button
+            className="hamburger-btn"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
+          >
+            <span /><span /><span />
+          </button>
         </div>
       </header>
+
+      {/* Mobile Drawer Overlay */}
+      {drawerOpen && (
+        <div className="drawer-overlay" onClick={() => setDrawerOpen(false)} />
+      )}
+
+      {/* Mobile Side Drawer */}
+      <div className={`mobile-drawer ${drawerOpen ? 'open' : ''}`}>
+        <div className="drawer-header">
+          <div className="drawer-logo">
+            <div className="topbar-logo-icon">⚡</div>
+            <div>
+              <div className="topbar-logo-text">All in One</div>
+              <div className="topbar-logo-sub">Compressor</div>
+            </div>
+          </div>
+          <button className="drawer-close" onClick={() => setDrawerOpen(false)}>✕</button>
+        </div>
+
+        <nav className="drawer-nav">
+          {navSections.map(section => (
+            <div key={section.label} className="drawer-section">
+              <button
+                className={`drawer-section-btn ${isPathInSection(section) ? 'active' : ''} ${drawerSection === section.label ? 'open' : ''}`}
+                onClick={() => toggleDrawerSection(section.label)}
+              >
+                <span className="drawer-section-left">
+                  <span>{section.icon}</span>
+                  <span>{section.label}</span>
+                </span>
+                <span className={`drawer-chevron ${drawerSection === section.label ? 'open' : ''}`}>▾</span>
+              </button>
+
+              <div className={`drawer-items ${drawerSection === section.label ? 'open' : ''}`}>
+                {section.items.map(item => (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className={({ isActive }) => `drawer-item ${isActive ? 'active' : ''}`}
+                    onClick={() => setDrawerOpen(false)}
+                  >
+                    <span>{item.icon}</span>
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        <div className="drawer-footer">
+          <button className="drawer-theme-btn" onClick={toggleTheme}>
+            {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+          </button>
+        </div>
+      </div>
 
       <main className="main-content">
         <Routes>
