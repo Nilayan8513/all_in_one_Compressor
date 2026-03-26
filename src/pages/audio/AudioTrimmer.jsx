@@ -126,13 +126,27 @@ export default function AudioTrimmer() {
   }
 
   // Dragging logic for handles and playhead
+  const getClientX = (e) => {
+    // Support both mouse and touch events
+    if (e.touches && e.touches.length > 0) return e.touches[0].clientX
+    if (e.changedTouches && e.changedTouches.length > 0) return e.changedTouches[0].clientX
+    return e.clientX
+  }
+
   const getTimeFromEvent = (e) => {
     const rect = waveformRef.current.getBoundingClientRect()
-    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+    const x = Math.max(0, Math.min(1, (getClientX(e) - rect.left) / rect.width))
     return x * duration
   }
 
   const handleMouseDown = (e, type) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragging(type)
+  }
+
+  // Unified handler for both mouse and touch start on handles
+  const handleDragStart = (e, type) => {
     e.preventDefault()
     e.stopPropagation()
     setDragging(type)
@@ -150,7 +164,7 @@ export default function AudioTrimmer() {
   useEffect(() => {
     if (!dragging) return
 
-    const handleMouseMove = (e) => {
+    const handleMove = (e) => {
       const time = getTimeFromEvent(e)
       if (dragging === 'start') {
         const clamped = Math.max(0, Math.min(time, endTime - 0.1))
@@ -167,15 +181,19 @@ export default function AudioTrimmer() {
       }
     }
 
-    const handleMouseUp = () => {
+    const handleUp = () => {
       setDragging(null)
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mousemove', handleMove)
+    window.addEventListener('mouseup', handleUp)
+    window.addEventListener('touchmove', handleMove, { passive: false })
+    window.addEventListener('touchend', handleUp)
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mousemove', handleMove)
+      window.removeEventListener('mouseup', handleUp)
+      window.removeEventListener('touchmove', handleMove)
+      window.removeEventListener('touchend', handleUp)
     }
   }, [dragging, duration, startTime, endTime])
 
@@ -348,16 +366,18 @@ export default function AudioTrimmer() {
 
                   {/* Start handle (green, draggable) */}
                   <div
-                    onMouseDown={(e) => handleMouseDown(e, 'start')}
+                    onMouseDown={(e) => handleDragStart(e, 'start')}
+                    onTouchStart={(e) => handleDragStart(e, 'start')}
                     style={{
                       position: 'absolute',
                       left: `${startPercent}%`,
                       top: 0, bottom: 0,
-                      width: 14,
-                      marginLeft: -7,
+                      width: 28,
+                      marginLeft: -14,
                       cursor: 'ew-resize',
                       zIndex: 10,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      touchAction: 'none',
                     }}
                   >
                     <div style={{
@@ -395,16 +415,18 @@ export default function AudioTrimmer() {
 
                   {/* End handle (green, draggable) */}
                   <div
-                    onMouseDown={(e) => handleMouseDown(e, 'end')}
+                    onMouseDown={(e) => handleDragStart(e, 'end')}
+                    onTouchStart={(e) => handleDragStart(e, 'end')}
                     style={{
                       position: 'absolute',
                       left: `${endPercent}%`,
                       top: 0, bottom: 0,
-                      width: 14,
-                      marginLeft: -7,
+                      width: 28,
+                      marginLeft: -14,
                       cursor: 'ew-resize',
                       zIndex: 10,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      touchAction: 'none',
                     }}
                   >
                     <div style={{
@@ -442,16 +464,18 @@ export default function AudioTrimmer() {
 
                   {/* Playhead (white, draggable) */}
                   <div
-                    onMouseDown={(e) => handleMouseDown(e, 'playhead')}
+                    onMouseDown={(e) => handleDragStart(e, 'playhead')}
+                    onTouchStart={(e) => handleDragStart(e, 'playhead')}
                     style={{
                       position: 'absolute',
                       left: `${currentPercent}%`,
                       top: 0, bottom: 0,
-                      width: 12,
-                      marginLeft: -6,
+                      width: 24,
+                      marginLeft: -12,
                       cursor: 'ew-resize',
                       zIndex: 11,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      touchAction: 'none',
                     }}
                   >
                     <div style={{
