@@ -1265,13 +1265,8 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* On mobile, hide section text labels, show only icons */
-  .topbar-section-btn .section-label { display: none; }
-  .topbar-section-btn { padding: 8px 10px; }
-
-  .topbar-dropdown {
-    min-width: 180px;
-  }
+  /* On mobile, hide entire navbar */
+  .topbar-nav { display: none; }
 
   .home-modules { grid-template-columns: 1fr; }
   .home-title { font-size: 30px; }

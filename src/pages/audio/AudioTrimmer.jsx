@@ -290,7 +290,7 @@ export default function AudioTrimmer() {
                     height: 120,
                     marginBottom: 16,
                     userSelect: 'none',
-                    overflow: 'visible',
+                    overflow: 'hidden',
                   }}
                 >
                   {/* Dimmed regions outside selection */}
@@ -381,12 +381,13 @@ export default function AudioTrimmer() {
                         <div style={{ width: 6, height: 1.5, background: 'rgba(0,0,0,0.4)', borderRadius: 1 }} />
                       </div>
                     </div>
-                    {/* Time label */}
+                    {/* Time label — inside box, top-left of handle */}
                     <div style={{
-                      position: 'absolute', top: -22, left: '50%', transform: 'translateX(-50%)',
+                      position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)',
                       fontSize: 10, fontWeight: 700, color: 'var(--audio-accent)',
                       fontFamily: 'monospace', whiteSpace: 'nowrap',
-                      background: 'var(--bg-secondary)', padding: '1px 5px', borderRadius: 4,
+                      background: 'rgba(0,0,0,0.55)', padding: '1px 5px', borderRadius: 4,
+                      zIndex: 12,
                     }}>
                       {formatTime(startTime)}
                     </div>
@@ -427,12 +428,13 @@ export default function AudioTrimmer() {
                         <div style={{ width: 6, height: 1.5, background: 'rgba(0,0,0,0.4)', borderRadius: 1 }} />
                       </div>
                     </div>
-                    {/* Time label */}
+                    {/* Time label — inside box, top-right of handle */}
                     <div style={{
-                      position: 'absolute', top: -22, left: '50%', transform: 'translateX(-50%)',
+                      position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)',
                       fontSize: 10, fontWeight: 700, color: 'var(--audio-accent)',
                       fontFamily: 'monospace', whiteSpace: 'nowrap',
-                      background: 'var(--bg-secondary)', padding: '1px 5px', borderRadius: 4,
+                      background: 'rgba(0,0,0,0.55)', padding: '1px 5px', borderRadius: 4,
+                      zIndex: 12,
                     }}>
                       {formatTime(endTime)}
                     </div>
