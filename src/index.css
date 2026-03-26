@@ -1307,12 +1307,8 @@ body, .topbar, .card, .page-header, .form-input, .form-select, .dropzone,
 /* ===== Dropzone file limit ===== */
 .dropzone-limit {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   margin-top: 6px;
-  padding: 3px 10px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border);
 }
 
 /* ===== Toast Notifications ===== */
