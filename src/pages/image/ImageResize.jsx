@@ -118,6 +118,7 @@ export default function ImageResize() {
             onFiles={handleFiles}
             label="Drop an image here or"
             hint="Supports JPG, PNG, WEBP, BMP, TIFF"
+            maxSize={10 * 1024 * 1024}
           />
         ) : (
           <div className="tool-layout">

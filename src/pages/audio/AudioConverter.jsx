@@ -113,6 +113,7 @@ export default function AudioConverter() {
               onFiles={handleFiles}
               label="Drop an audio file here or"
               hint="Supports MP3, WAV, AAC, OGG, FLAC, M4A, OPUS"
+              maxSize={50 * 1024 * 1024}
             />
           ) : (
             <div>

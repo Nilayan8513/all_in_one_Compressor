@@ -229,6 +229,7 @@ export default function PdfCompressor() {
             onFiles={handleFiles}
             label="Drop a PDF here or"
             hint="Compress PDFs by adjusting image quality — see exact sizes"
+            maxSize={25 * 1024 * 1024}
           />
         ) : (
           <div className="tool-layout">

@@ -86,6 +86,7 @@ export default function PdfMerger() {
             onFiles={handleFiles}
             label="Drop PDFs here or"
             hint="Upload multiple PDF files to merge"
+            maxSize={15 * 1024 * 1024}
           />
 
           {files.length > 0 && (

@@ -157,6 +157,7 @@ export default function PdfToImage() {
             onFiles={handleFiles}
             label="Drop a PDF here or"
             hint="Each page will be converted to an image"
+            maxSize={25 * 1024 * 1024}
           />
         ) : (
           <div style={{ maxWidth: 700, width: '100%', margin: '0 auto' }}>

@@ -259,6 +259,7 @@ export default function AudioTrimmer() {
               onFiles={handleFiles}
               label="Drop an audio file here or"
               hint="Supports MP3, WAV, OGG, FLAC and more"
+              maxSize={50 * 1024 * 1024}
             />
           ) : (
             <div>

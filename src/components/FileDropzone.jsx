@@ -1,25 +1,44 @@
 import { useState, useRef, useCallback } from 'react'
+import { useToast } from './Toast'
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
 
 export default function FileDropzone({ accept, multiple = false, onFiles, label, hint, maxSize }) {
   const [isDragOver, setIsDragOver] = useState(false)
   const inputRef = useRef(null)
+  const toast = useToast()
+
+  const validateAndPass = useCallback((files) => {
+    if (maxSize) {
+      const oversized = files.filter(f => f.size > maxSize)
+      if (oversized.length > 0) {
+        toast(`File too large (${formatBytes(oversized[0].size)}). Maximum allowed: ${formatBytes(maxSize)}`, 'error')
+        return
+      }
+    }
+    onFiles(files)
+  }, [maxSize, onFiles, toast])
 
   const handleDrop = useCallback((e) => {
     e.preventDefault()
     setIsDragOver(false)
     const files = Array.from(e.dataTransfer.files)
     if (files.length > 0) {
-      onFiles(multiple ? files : [files[0]])
+      validateAndPass(multiple ? files : [files[0]])
     }
-  }, [multiple, onFiles])
+  }, [multiple, validateAndPass])
 
   const handleChange = useCallback((e) => {
     const files = Array.from(e.target.files)
     if (files.length > 0) {
-      onFiles(multiple ? files : [files[0]])
+      validateAndPass(multiple ? files : [files[0]])
     }
     e.target.value = ''
-  }, [multiple, onFiles])
+  }, [multiple, validateAndPass])
 
   return (
     <div
@@ -37,6 +56,11 @@ export default function FileDropzone({ accept, multiple = false, onFiles, label,
       <div className="dropzone-hint">
         {hint || 'Supports common file formats'}
       </div>
+      {maxSize && (
+        <div className="dropzone-limit">
+          Max file size: {formatBytes(maxSize)}
+        </div>
+      )}
       <input
         ref={inputRef}
         type="file"

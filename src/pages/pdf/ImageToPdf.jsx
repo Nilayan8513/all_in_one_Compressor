@@ -116,6 +116,7 @@ export default function ImageToPdf() {
             onFiles={handleFiles}
             label="Drop images here or"
             hint="Supports JPG and PNG — drag to reorder after upload"
+            maxSize={10 * 1024 * 1024}
           />
 
           {images.length > 0 && (
