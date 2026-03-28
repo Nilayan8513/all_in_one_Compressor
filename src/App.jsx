@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
+
+// Existing pages
 import HomePage from './pages/HomePage'
 import ImageCompressor from './pages/image/ImageCompressor'
 import ImageResize from './pages/image/ImageResize'
@@ -9,6 +11,23 @@ import ImageToPdf from './pages/pdf/ImageToPdf'
 import PdfCompressor from './pages/pdf/PdfCompressor'
 import AudioConverter from './pages/audio/AudioConverter'
 import AudioTrimmer from './pages/audio/AudioTrimmer'
+
+// New image tools
+import ImageFormatConverter from './pages/image/ImageFormatConverter'
+import ImageMetadataStripper from './pages/image/ImageMetadataStripper'
+
+// New PDF tools
+import PdfSplitter from './pages/pdf/PdfSplitter'
+import PdfPageReorder from './pages/pdf/PdfPageReorder'
+import PdfPageNumberer from './pages/pdf/PdfPageNumberer'
+
+// New audio tools
+import AudioVolumeAdjuster from './pages/audio/AudioVolumeAdjuster'
+import AudioMerger from './pages/audio/AudioMerger'
+
+// Utility tools
+import QrCodeGenerator from './pages/utilities/QrCodeGenerator'
+import Base64ImageConverter from './pages/utilities/Base64ImageConverter'
 
 function App() {
   const location = useLocation()
@@ -45,6 +64,8 @@ function App() {
       items: [
         { path: '/image/compress', icon: '📦', label: 'Image Compressor' },
         { path: '/image/resize', icon: '📐', label: 'Image Resize' },
+        { path: '/image/convert', icon: '🔀', label: 'Format Converter' },
+        { path: '/image/metadata-strip', icon: '🔏', label: 'Metadata Stripper' },
       ]
     },
     {
@@ -53,8 +74,11 @@ function App() {
       items: [
         { path: '/pdf/compress', icon: '📦', label: 'PDF Compressor' },
         { path: '/pdf/merge', icon: '📑', label: 'PDF Merger' },
+        { path: '/pdf/split', icon: '✂️', label: 'PDF Splitter' },
         { path: '/pdf/to-image', icon: '🖼️', label: 'PDF → Image' },
         { path: '/pdf/from-image', icon: '📄', label: 'Image → PDF' },
+        { path: '/pdf/reorder', icon: '↕️', label: 'Reorder Pages' },
+        { path: '/pdf/number', icon: '🔢', label: 'Page Numberer' },
       ]
     },
     {
@@ -63,6 +87,16 @@ function App() {
       items: [
         { path: '/audio/convert', icon: '🔄', label: 'Format Converter' },
         { path: '/audio/trim', icon: '✂️', label: 'Trim & Cut' },
+        { path: '/audio/volume', icon: '🔊', label: 'Volume Adjuster' },
+        { path: '/audio/merge', icon: '🎶', label: 'Audio Merger' },
+      ]
+    },
+    {
+      label: 'Utilities',
+      icon: '🛠️',
+      items: [
+        { path: '/utilities/qrcode', icon: '⊞', label: 'QR Code Generator' },
+        { path: '/utilities/base64', icon: '⇄', label: 'Base64 Converter' },
       ]
     }
   ]
@@ -209,14 +243,27 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          {/* Image */}
           <Route path="/image/compress" element={<ImageCompressor />} />
           <Route path="/image/resize" element={<ImageResize />} />
+          <Route path="/image/convert" element={<ImageFormatConverter />} />
+          <Route path="/image/metadata-strip" element={<ImageMetadataStripper />} />
+          {/* PDF */}
           <Route path="/pdf/compress" element={<PdfCompressor />} />
           <Route path="/pdf/merge" element={<PdfMerger />} />
+          <Route path="/pdf/split" element={<PdfSplitter />} />
           <Route path="/pdf/to-image" element={<PdfToImage />} />
           <Route path="/pdf/from-image" element={<ImageToPdf />} />
+          <Route path="/pdf/reorder" element={<PdfPageReorder />} />
+          <Route path="/pdf/number" element={<PdfPageNumberer />} />
+          {/* Audio */}
           <Route path="/audio/convert" element={<AudioConverter />} />
           <Route path="/audio/trim" element={<AudioTrimmer />} />
+          <Route path="/audio/volume" element={<AudioVolumeAdjuster />} />
+          <Route path="/audio/merge" element={<AudioMerger />} />
+          {/* Utilities */}
+          <Route path="/utilities/qrcode" element={<QrCodeGenerator />} />
+          <Route path="/utilities/base64" element={<Base64ImageConverter />} />
         </Routes>
       </main>
     </div>
