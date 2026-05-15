@@ -13,6 +13,7 @@
 > Nothing is ever uploaded to any server.
 
 ---
+[![🚀 Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-All%20in%20One%20Compressor-6366f1?style=for-the-badge&logoColor=white)](https://all-in-one-compressor.vercel.app/)
 
 </div>
 
